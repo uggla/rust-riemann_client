@@ -11,7 +11,7 @@ default = ["docopt", "rustc-serialize"]
 
 [dependencies]
 libc = "^0.1.8"
-protobuf = "^1.0.0"
+protobuf = "2.20.0"
 
 [dependencies.docopt]
 version = "^0.6.60"

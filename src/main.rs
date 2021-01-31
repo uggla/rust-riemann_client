@@ -11,7 +11,7 @@ extern crate protobuf;
 extern crate riemann_client;
 extern crate rustc_serialize;
 
-static USAGE: &'static str = "
+static USAGE: &str = "
 Usage: riemann_cli [-HP] send [options]
        riemann_cli [-HP] query <query>
        riemann_cli --help | --version
@@ -76,15 +76,33 @@ fn main() {
     if args.cmd_send {
         let mut event = riemann_client::proto::Event::new();
 
-        if let Some(x) = args.flag_time { event.set_time(x); }
-        if let Some(x) = args.flag_state { event.set_state(x); }
-        if let Some(x) = args.flag_service { event.set_service(x); }
-        if let Some(x) = args.flag_host { event.set_host(x); }
-        if let Some(x) = args.flag_description { event.set_description(x); }
-        if let Some(x) = args.flag_ttl { event.set_ttl(x); }
-        if let Some(x) = args.flag_metric_sint64 { event.set_metric_sint64(x); }
-        if let Some(x) = args.flag_metric_d { event.set_metric_d(x); }
-        if let Some(x) = args.flag_metric_f { event.set_metric_f(x); }
+        if let Some(x) = args.flag_time {
+            event.set_time(x);
+        }
+        if let Some(x) = args.flag_state {
+            event.set_state(x);
+        }
+        if let Some(x) = args.flag_service {
+            event.set_service(x);
+        }
+        if let Some(x) = args.flag_host {
+            event.set_host(x);
+        }
+        if let Some(x) = args.flag_description {
+            event.set_description(x);
+        }
+        if let Some(x) = args.flag_ttl {
+            event.set_ttl(x);
+        }
+        if let Some(x) = args.flag_metric_sint64 {
+            event.set_metric_sint64(x);
+        }
+        if let Some(x) = args.flag_metric_d {
+            event.set_metric_d(x);
+        }
+        if let Some(x) = args.flag_metric_f {
+            event.set_metric_f(x);
+        }
 
         if !args.flag_tag.is_empty() {
             event.set_tags(protobuf::RepeatedField::from_vec(args.flag_tag));
@@ -92,13 +110,17 @@ fn main() {
 
         if let Some(x) = args.flag_attribute {
             let mut vec_attr: Vec<Attribute> = Vec::new();
-            let mut args_attr = x;
-            let mut args_attr_split = args_attr.split(',');
+            let args_attr = x;
+            let args_attr_split = args_attr.split(',');
             for attr in args_attr_split {
-                let mut res: Vec<String> = attr.split("=").map(|s| s.to_string()).collect();
+                let mut res: Vec<String> = attr.split('=').map(|s| s.to_string()).collect();
                 let mut at = Attribute::new();
-                if let Some(x) = res.pop() { at.set_value(x) };
-                if let Some(x) = res.pop() { at.set_key(x) };
+                if let Some(x) = res.pop() {
+                    at.set_value(x)
+                };
+                if let Some(x) = res.pop() {
+                    at.set_key(x)
+                };
                 vec_attr.push(at);
             }
             event.set_attributes(protobuf::RepeatedField::from_vec(vec_attr));
@@ -112,10 +134,12 @@ fn main() {
 
         println!(
             "{:<10} {:<10} {:<55} {:<10} {:<10}",
-            "HOSTNAME", "TIME", "SERVICE", "METRIC", "STATE");
+            "HOSTNAME", "TIME", "SERVICE", "METRIC", "STATE"
+        );
 
         for event in events {
-            println!("{:<10} {:<10} {:<55} {:<10} {:<10}",
+            println!(
+                "{:<10} {:<10} {:<55} {:<10} {:<10}",
                 event.get_host(),
                 event.get_time(),
                 event.get_service(),
